@@ -48,3 +48,24 @@ The useful SM100 design ideas can still be ported without pretending UTCOMMA exi
 5. Treat >1 PFLOP as valid only when measured issued work/time increases under the existing dense-equivalent sparse-NVFP4 accounting.
 
 The next static lane is opcode-class mapping and a dual-bank OMMA reconstruction. Runtime testing remains deferred while the production GB10 trainer owns the GPU.
+
+## Additional decoder and dual-stream results
+
+- Rewriting only the ELF architecture flags of a valid SM100A UTCOMMA cubin from `sm_100a` to `sm_121a`
+  makes `nvdisasm` reject the UTCOMMA instruction as an **unrecognized uC operation / illegal instruction**.
+  This is additional evidence that the UTCOMMA execution class is not merely hidden behind a PTX frontend gate on SM121.
+- Exhaustive static decode of the obvious SM121 OMMA modifier bits 80..86 produced exactly eight mnemonic families:
+  dense/sparse x E8/UE4M3 x 4X/non-4X. It exposed no `2CTA`, `8X`, or K=256 form.
+- Exhaustively varying instruction bytes 13 and 15 did not reveal another OMMA mnemonic. Most changes are either
+  accepted scheduling/control encodings or rejected decoder states.
+
+A separate static dual-bank reconstruction (`src/peak_dual_omma_static.cu`) compiles for SM121A without executing:
+
+| Static form | Registers | Spill stores/loads | Static OMMA count in cubin |
+|---|---:|---:|---:|
+| one bank, 16 accumulators | 74 | 0 / 0 | 464 |
+| two banks, 8+8 accumulators | 81 | 0 / 0 | 464 |
+| two banks, 16+16 accumulators | 138 | 0 / 0 | 928 |
+
+This proves the compiler can preserve two independent OMMA operand/accumulator banks cheaply in the 8+8 form,
+but it does **not** prove dual issue. Runtime throughput measurement is intentionally deferred while production owns GB10.

@@ -1,0 +1,23 @@
+{
+  "kind": "static_only_sm121_tcgen05_reconstruction",
+  "cuda_toolkit": "13.0.88",
+  "runtime_kernel_execution": false,
+  "tcgen05_sm100a_compile": "pass",
+  "tcgen05_sm121a_compile": "rejected_by_ptxas",
+  "sm100_sass_1cta": "UTCOMMA.4X",
+  "sm100_sass_2cta": "UTCOMMA.2CTA.4X",
+  "utcomma_2cta_toggle": "upper64 bit21 / overall instruction bit85",
+  "sm121_sass": "OMMA.SF.SP.168128.F32.E2M1.E2M1.UE4M3.4X",
+  "sm121_baseline_low64": "0x703002040404747f",
+  "sm121_baseline_high64": "0x000fe20000053eff",
+  "sm100_reflagged_as_sm121": "nvdisasm_illegal_uC_operation",
+  "sm121_modifier_scan_80_86_unique_families": 8,
+  "hidden_2cta_seen": false,
+  "hidden_8x_seen": false,
+  "hidden_k256_seen": false,
+  "dual_bank_static": {
+    "one_16": {"registers": 74, "spill_stores": 0, "spill_loads": 0, "static_omma_count": 464},
+    "two_8x8": {"registers": 81, "spill_stores": 0, "spill_loads": 0, "static_omma_count": 464},
+    "two_16x16": {"registers": 138, "spill_stores": 0, "spill_loads": 0, "static_omma_count": 928}
+  }
+}
