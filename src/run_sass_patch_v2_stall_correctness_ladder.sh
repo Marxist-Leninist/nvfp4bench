@@ -8,7 +8,7 @@ V=$D/run_correctness_v2
 # Correctness-first, high-stall -> low-stall. No timing here.
 # Each invocation independently rechecks the SG fence and CUDA/process census.
 # Stop on the first loader/arithmetic failure because set -e is intentional.
-for st in 12 10 8 6 4 2 1; do
+for st in 12 10 8 7 6 4 2 1; do
   echo "=== base stall=$st ==="
   "$G" "$V" "$D/base.cubin" "$S/base_stall${st}.cubin" 0 0 8
   echo "=== fill25 stall=$st ==="

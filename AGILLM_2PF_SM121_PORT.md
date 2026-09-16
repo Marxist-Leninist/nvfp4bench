@@ -119,3 +119,8 @@ No patched result counts as a 2PF improvement unless, in order:
 5. repeated trials show the gain and the measured OMMA/SM/cycle moves toward 0.508626;
 6. production RPV16/DBlock remains outside the benchmark window and is never stopped by this lane.
 
+
+
+### Exact scheduler target math
+
+The observed ~1 PF result is numerically consistent with four scheduler issue domains each sustaining about one sparse OMMA every 16 cycles: `4/16 = 0.25 OMMA/SM/cycle`, which is 983.04 TFLOP/s at 48 SM * 2.5 GHz * 32,768 FLOPs/OMMA. If NOP removal plus a correct stall=8 schedule reaches one OMMA per 8 cycles per scheduler domain, the corresponding fixed-clock value is 0.5 OMMA/SM/cycle = **1.96608 PFLOP/s**. That is still below the strict 2 PF target. Stall=7 is therefore the first reduced-stall point whose scheduler ceiling exceeds the target: `4/7 = 0.57143 OMMA/SM/cycle`, or ~2.247 PFLOP/s before real scheduling/occupancy overheads. This is only a hypothesis for the guarded silicon test, not a performance claim.
