@@ -13,8 +13,8 @@
       2,
       2,
       2,
-      1,
       2,
+      1,
       2,
       2,
       2,
@@ -78,6 +78,8 @@
     "runtime_executed": false,
     "runtime_throughput_measurement_required": true,
     "schema": "agillm.sm121.pure-issue-mixed-threshold-witness.v1",
+    "sink_index_correction": "Source DO(j) order differs from stored sink order; omitted donor source DO(7) maps to sink index 8.",
+    "sink_index_correction_status": "SILICON_VERIFIED",
     "source": "/workspace/gb10_2pflop_openfork_20260916/static_recon/control_probe2/pure_issue_witness/fill100_stall8_yield0.cubin",
     "source_sha256": "49777382a1dc76ed576750a78b5840da19c5de91637a63a15b4fb587e9d36b01",
     "stall_control_semantics": "per-warp eligibility schedule; not a global SM tensor-issue period",
@@ -88,7 +90,25 @@
     "steady_omma_count": 30
   },
   "candidate_cubin_sha256": "97240b6e47e088b3c88db821064b1c04012fb7bf9ffeed7b808eea77a10fe905",
-  "candidate_manifest_sha256": "8504e003238e7b272f59dc3974f92bae27130236b1b1f948f45a2d022649c91f",
+  "candidate_manifest_sha256": "fcb9caf374d971c7bb6d5a13dd99e6f96673688263b2d023e592d633a1681c54",
+  "correct_sink_multiplicity": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
   "created_utc": "2026-09-16T07:45:22Z",
   "deprecated_naive_global_extrapolation_pf_48sm_2p5ghz": 2.0079114893617027,
   "mixed_family_observation": "Sparse/dense and 2X/4X transitions examined by mixed_omma_resource all retain cumulative effective issue gap 16.",
@@ -104,5 +124,6 @@
   "runtime_gate": "Use upstream/src/run_2pf_guarded.sh. A naturally idle GPU is acceptable; otherwise upstream/src/run_2pf_handoff.sh may create a bounded STOP/CONT window only when SG_2PF_BENCH_HANDOFF=approved is explicitly set for the current task, exact production PID and CUDA census match, checkpoint-safety checks pass, and trap-based resume remains armed.",
   "runtime_throughput_measurement_required": true,
   "scheduler_model_correction": "Encoded stall is per-warp eligibility, not a proven global issue period. The historical 4/N extrapolation is invalid as a PFLOP/s prediction; aggregate throughput must be measured.",
-  "schema": "agillm.sm121.mixed-threshold-static-receipt.v1"
+  "schema": "agillm.sm121.mixed-threshold-static-receipt.v1",
+  "sink_index_correction_status": "SILICON_VERIFIED"
 }

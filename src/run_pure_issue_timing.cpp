@@ -49,8 +49,15 @@ int main(int argc, char** argv) {
   CUfunction fun;
   ck(cuModuleGetFunction(&fun, mod, "pure_issue_witness"), "cuModuleGetFunction");
 
+  int max_active_blocks_per_sm = 0;
+  ck(cuOccupancyMaxActiveBlocksPerMultiprocessor(&max_active_blocks_per_sm, fun, block, 0),
+     "cuOccupancyMaxActiveBlocksPerMultiprocessor");
+  const int warps_per_block = block / 32;
+  const int max_resident_warps_per_sm = max_active_blocks_per_sm * warps_per_block;
+  const int requested_grid_warps_per_sm = bpsm * warps_per_block;
+
   const int blocks = sms * bpsm;
-  const long long warps = (long long)blocks * (block / 32);
+  const long long warps = (long long)blocks * warps_per_block;
   const double omma_per_launch = (double)warps * (double)iters * (double)opi;
   const size_t sink_bytes = (size_t)blocks * 64u * sizeof(float);
   CUdeviceptr sink;
@@ -94,12 +101,15 @@ int main(int argc, char** argv) {
     "{\"schema\":\"agillm.sm121.pure-issue-timing.v1\","
     "\"cubin\":\"%s\",\"cc\":\"%d.%d\",\"sms\":%d,\"clock_attr_mhz\":%.3f,"
     "\"blocks\":%d,\"block\":%d,\"blocks_per_sm\":%d,\"warps\":%lld,"
+    "\"warps_per_block\":%d,\"requested_grid_warps_per_sm\":%d,"
+    "\"max_active_blocks_per_sm\":%d,\"max_resident_warps_per_sm\":%d,"
     "\"iters\":%d,\"omma_per_warp_iter\":%d,\"omma_per_launch\":%.0f,\"reps\":%d,"
     "\"median_ms\":%.9f,\"min_ms\":%.9f,\"median_tflops\":%.6f,\"best_tflops\":%.6f,"
     "\"median_omma_per_sm_cycle_at_2p5ghz\":%.9f,\"best_omma_per_sm_cycle_at_2p5ghz\":%.9f,"
     "\"median_omma_per_sm_cycle_at_clock_attr\":%.9f,\"best_omma_per_sm_cycle_at_clock_attr\":%.9f,"
     "\"target_2pf_omma_per_sm_cycle_at_2p5ghz\":%.9f}\n",
     path, cc_major, cc_minor, sms, clock_khz / 1000.0, blocks, block, bpsm, warps,
+    warps_per_block, requested_grid_warps_per_sm, max_active_blocks_per_sm, max_resident_warps_per_sm,
     iters, opi, omma_per_launch, reps, median_ms, min_ms, tf(median_ms), tf(min_ms),
     fixed_median, fixed_best,
     median_omma_s / (sms * attr_hz), best_omma_s / (sms * attr_hz), target_rate);
