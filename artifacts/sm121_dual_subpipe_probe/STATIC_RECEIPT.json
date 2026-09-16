@@ -1,0 +1,26 @@
+{
+  "decision_metric": "concurrency_speedup_vs_serial=(T_omma+T_imma)/T_dual and dual_time_over_slowest_standalone=T_dual/max(T_omma,T_imma). Independent subpipes approach the latter ~=1; shared serialization approaches concurrency speedup ~=1.",
+  "dense_equivalent_ops_per_instruction": {
+    "imma": 16384,
+    "omma": 32768
+  },
+  "design": "128-thread block: even warps execute 16 native sparse FP4 OMMAs/loop; odd warps execute 16 native sparse S8 IMMAs/loop. Standalone kernels use the same warp positions and geometry; dual kernel enables both.",
+  "helper_calls": {
+    "dual": 0,
+    "imma_only": 0,
+    "omma_only": 0
+  },
+  "matrix_forms": {
+    "imma": "IMMA.SP.16864.S8.S8",
+    "omma": "OMMA.SF.SP.168128.F32.E2M1.E2M1.UE4M3.4X"
+  },
+  "resource_usage_text_sha256": "f20179effd9c8f76aa68305a06c9931a4a84df0ab4291bb0bb1c202f69bb9ecc",
+  "runtime_executed": false,
+  "runtime_gate": "Existing run_2pf_guarded.sh; no production stop/signal from this probe. Correctness runner compares dual outputs against standalone OMMA/IMMA outputs before accepting timing.",
+  "schema": "agillm.sm121.dual-subpipe-static.v1",
+  "source_sha256": "5bcff1974426122e82fe839ac94615c6c08d0492d8a9291cf5442eab24f01dd5",
+  "static_instruction_counts_per_unrolled_active_warp": {
+    "imma": 16,
+    "omma": 16
+  }
+}
