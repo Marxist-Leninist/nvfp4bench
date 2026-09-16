@@ -124,3 +124,18 @@ No patched result counts as a 2PF improvement unless, in order:
 ### Exact scheduler target math
 
 The observed ~1 PF result is numerically consistent with four scheduler issue domains each sustaining about one sparse OMMA every 16 cycles: `4/16 = 0.25 OMMA/SM/cycle`, which is 983.04 TFLOP/s at 48 SM * 2.5 GHz * 32,768 FLOPs/OMMA. If NOP removal plus a correct stall=8 schedule reaches one OMMA per 8 cycles per scheduler domain, the corresponding fixed-clock value is 0.5 OMMA/SM/cycle = **1.96608 PFLOP/s**. That is still below the strict 2 PF target. Stall=7 is therefore the first reduced-stall point whose scheduler ceiling exceeds the target: `4/7 = 0.57143 OMMA/SM/cycle`, or ~2.247 PFLOP/s before real scheduling/occupancy overheads. This is only a hypothesis for the guarded silicon test, not a performance claim.
+
+
+## 2026-09-16 mixed 7/8-cycle threshold witness
+
+A conservative threshold candidate was derived from the 31-OMMA `fill100_stall8_yield0` arithmetic witness. Exactly five evenly spaced steady sparse OMMAs were changed from stall 8 to stall 7; the other 25 steady OMMAs remain at stall 8 and the terminal control word is unchanged.
+
+- steady stall mix: 5 x stall7 + 25 x stall8
+- nominal average steady interval: 7.833333 cycles
+- fixed-accounting scheduler ceiling: ~2.00791 PFLOP/s at 48 SM x 2.5 GHz x 32,768 dense-equivalent FLOPs per sparse OMMA
+- semantic SASS: unchanged
+- patch scope: exact stall bits only; yield=0 preserved on patched instructions
+- Basalt strict structural check: 168 instructions, 7 blocks, 405 dependencies, clean
+- runtime status: **not executed**; this is not a measured 2-PF result
+
+The candidate and receipts are tracked under `artifacts/sm121_mixed_threshold_witness/`. Runtime promotion remains fail-closed: arithmetic witness first, timing only after correctness passes in a naturally idle GPU window.

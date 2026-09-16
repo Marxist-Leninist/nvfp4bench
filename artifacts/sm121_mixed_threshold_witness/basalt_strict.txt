@@ -1,0 +1,4 @@
+/workspace/gb10_2pflop_openfork_20260916/static_recon/control_probe2/mixed_threshold_witness/fill100_mixed5_stall7_rest8_yield0.cubin
+  168 instructions in 7 blocks, 405 dependencies checked across blocks: clean
+  pair data: 3957 pairings from 25634 kernels, 427 producers with enough observations to use
+  latency model: measured on NVIDIA GeForce RTX 5070 Ti
