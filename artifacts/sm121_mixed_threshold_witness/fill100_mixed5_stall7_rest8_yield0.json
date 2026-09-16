@@ -1,4 +1,6 @@
 {
+  "deprecated_naive_global_extrapolation_pf_48sm_2p5ghz": 2.0079114893617027,
+  "deprecated_naive_global_extrapolation_status": "INVALID_GLOBAL_SCHEDULER_MODEL",
   "expected_accumulator_multiplicity": [
     2,
     2,
@@ -18,9 +20,10 @@
     2
   ],
   "function": "pure_issue_witness",
-  "gate": "Static only. Must run through fail-closed guard in a naturally empty GPU window; arithmetic witness must pass before timing.",
+  "gate": "Static candidate only. Runtime requires arithmetic witness before timing through the fail-closed guard. A stopped-production benchmark window is permitted only through a separately and explicitly approved exact-PID bounded handoff with checkpoint-safety checks and guaranteed resume.",
+  "global_throughput_prediction_from_stall_only": null,
+  "model_correction": "The previous 4/N scheduler-domain extrapolation is invalid without proof of global issue-domain mapping. Many resident warps can interleave while each warp observes its own control-stall eligibility.",
   "nominal_average_steady_stall": 7.833333333333333,
-  "nominal_scheduler_ceiling_pf_48sm_2p5ghz": 2.0079114893617027,
   "omma_count": 31,
   "output": "/workspace/gb10_2pflop_openfork_20260916/static_recon/control_probe2/mixed_threshold_witness/fill100_mixed5_stall7_rest8_yield0.cubin",
   "output_sha256": "97240b6e47e088b3c88db821064b1c04012fb7bf9ffeed7b808eea77a10fe905",
@@ -69,9 +72,11 @@
     "yield_preserved_zero": true
   },
   "runtime_executed": false,
+  "runtime_throughput_measurement_required": true,
   "schema": "agillm.sm121.pure-issue-mixed-threshold-witness.v1",
   "source": "/workspace/gb10_2pflop_openfork_20260916/static_recon/control_probe2/pure_issue_witness/fill100_stall8_yield0.cubin",
   "source_sha256": "49777382a1dc76ed576750a78b5840da19c5de91637a63a15b4fb587e9d36b01",
+  "stall_control_semantics": "per-warp eligibility schedule; not a global SM tensor-issue period",
   "stall_counts_steady": {
     "7": 5,
     "8": 25

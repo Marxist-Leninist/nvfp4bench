@@ -3,6 +3,8 @@
   "basalt_strict_clean": true,
   "basalt_strict_sha256": "45881a91491470813aefb004196f2bc4deef2c3224703d2003efeb1ebb0fc7e6",
   "candidate": {
+    "deprecated_naive_global_extrapolation_pf_48sm_2p5ghz": 2.0079114893617027,
+    "deprecated_naive_global_extrapolation_status": "INVALID_GLOBAL_SCHEDULER_MODEL",
     "expected_accumulator_multiplicity": [
       2,
       2,
@@ -22,9 +24,10 @@
       2
     ],
     "function": "pure_issue_witness",
-    "gate": "Static only. Must run through fail-closed guard in a naturally empty GPU window; arithmetic witness must pass before timing.",
+    "gate": "Static candidate only. Runtime requires arithmetic witness before timing through the fail-closed guard. A stopped-production benchmark window is permitted only through a separately and explicitly approved exact-PID bounded handoff with checkpoint-safety checks and guaranteed resume.",
+    "global_throughput_prediction_from_stall_only": null,
+    "model_correction": "The previous 4/N scheduler-domain extrapolation is invalid without proof of global issue-domain mapping. Many resident warps can interleave while each warp observes its own control-stall eligibility.",
     "nominal_average_steady_stall": 7.833333333333333,
-    "nominal_scheduler_ceiling_pf_48sm_2p5ghz": 2.0079114893617027,
     "omma_count": 31,
     "output": "/workspace/gb10_2pflop_openfork_20260916/static_recon/control_probe2/mixed_threshold_witness/fill100_mixed5_stall7_rest8_yield0.cubin",
     "output_sha256": "97240b6e47e088b3c88db821064b1c04012fb7bf9ffeed7b808eea77a10fe905",
@@ -73,9 +76,11 @@
       "yield_preserved_zero": true
     },
     "runtime_executed": false,
+    "runtime_throughput_measurement_required": true,
     "schema": "agillm.sm121.pure-issue-mixed-threshold-witness.v1",
     "source": "/workspace/gb10_2pflop_openfork_20260916/static_recon/control_probe2/pure_issue_witness/fill100_stall8_yield0.cubin",
     "source_sha256": "49777382a1dc76ed576750a78b5840da19c5de91637a63a15b4fb587e9d36b01",
+    "stall_control_semantics": "per-warp eligibility schedule; not a global SM tensor-issue period",
     "stall_counts_steady": {
       "7": 5,
       "8": 25
@@ -83,8 +88,9 @@
     "steady_omma_count": 30
   },
   "candidate_cubin_sha256": "97240b6e47e088b3c88db821064b1c04012fb7bf9ffeed7b808eea77a10fe905",
-  "candidate_manifest_sha256": "98a4f67ac6d6f641b20b7c20e61d8ff4e2cd663df7cb5df70a234bc3910f2f65",
+  "candidate_manifest_sha256": "8504e003238e7b272f59dc3974f92bae27130236b1b1f948f45a2d022649c91f",
   "created_utc": "2026-09-16T07:45:22Z",
+  "deprecated_naive_global_extrapolation_pf_48sm_2p5ghz": 2.0079114893617027,
   "mixed_family_observation": "Sparse/dense and 2X/4X transitions examined by mixed_omma_resource all retain cumulative effective issue gap 16.",
   "mixed_family_second_issue_lane": "not_supported_by_compiler_static_evidence",
   "recommended_runtime_order": [
@@ -95,6 +101,8 @@
     "timing only after each corresponding arithmetic witness passes"
   ],
   "runtime_executed": false,
-  "runtime_gate": "Only in a naturally empty GPU window through upstream/src/run_2pf_guarded.sh with SG_2PF_BENCH_FENCE=approved. Never pause/stop production to manufacture the window.",
+  "runtime_gate": "Use upstream/src/run_2pf_guarded.sh. A naturally idle GPU is acceptable; otherwise upstream/src/run_2pf_handoff.sh may create a bounded STOP/CONT window only when SG_2PF_BENCH_HANDOFF=approved is explicitly set for the current task, exact production PID and CUDA census match, checkpoint-safety checks pass, and trap-based resume remains armed.",
+  "runtime_throughput_measurement_required": true,
+  "scheduler_model_correction": "Encoded stall is per-warp eligibility, not a proven global issue period. The historical 4/N extrapolation is invalid as a PFLOP/s prediction; aggregate throughput must be measured.",
   "schema": "agillm.sm121.mixed-threshold-static-receipt.v1"
 }
