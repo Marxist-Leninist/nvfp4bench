@@ -54,7 +54,8 @@ __global__ __launch_bounds__(128,1) void peak_issue(int iters, float* sink) {
 }
 
 template<int FORM,int BANKS,int ACC>
-static double bench(const char* name,int blocks,int block,int iters,float* sink,cudaEvent_t a,cudaEvent_t b) {
+static double bench(const char* name,int sms,int blocks_per_sm,int block,int iters,float* sink,cudaEvent_t a,cudaEvent_t b) {
+  int blocks=sms*blocks_per_sm;
   peak_issue<FORM,BANKS,ACC><<<blocks,block>>>(iters,sink); cudaDeviceSynchronize();
   std::vector<float> ms;
   for(int r=0;r<12;++r){ cudaEventRecord(a); peak_issue<FORM,BANKS,ACC><<<blocks,block>>>(iters,sink); cudaEventRecord(b); cudaEventSynchronize(b); float x=0; cudaEventElapsedTime(&x,a,b); ms.push_back(x); }
@@ -62,22 +63,35 @@ static double bench(const char* name,int blocks,int block,int iters,float* sink,
   long long warps=(long long)blocks*(block/32); long long omma_per_warp=(long long)iters*BANKS*ACC;
   double total_omma=(double)warps*omma_per_warp;
   double omma_s=total_omma/(med*1e-3); double tf=omma_s*FLOP_PER_SPARSE_OMMA/1e12;
-  std::printf("%-18s median_ms=%9.4f TFLOPS=%9.2f OMMA/s=%12.4e inst/warp=%lld\n",name,med,tf,omma_s,omma_per_warp);
+  double ghz=2.5; // fixed target clock used by the 2-PF research contract
+  double omma_per_sm_cycle=omma_s/(double(sms)*ghz*1e9);
+  std::printf("%-18s block=%3d b/SM=%2d median_ms=%9.4f TFLOPS=%9.2f OMMA/s=%12.4e OMMA/SM/cyc=%.5f inst/warp=%lld\n",
+              name,block,blocks_per_sm,med,tf,omma_s,omma_per_sm_cycle,omma_per_warp);
   return tf;
 }
 
 int main(){
   int dev=0; cudaSetDevice(dev); cudaDeviceProp p{}; cudaGetDeviceProperties(&p,dev);
-  int blocks=p.multiProcessorCount*8, block=128, iters=700; float* sink=nullptr; cudaMalloc(&sink,sizeof(float)*blocks);
+  const int iters=700;
+  const int blocksizes[]={32,64,128};
+  const int bpsms[]={1,2,4,8,16};
+  const int max_blocks=p.multiProcessorCount*16;
+  float* sink=nullptr; cudaMalloc(&sink,sizeof(float)*max_blocks);
   cudaEvent_t a,b; cudaEventCreate(&a); cudaEventCreate(&b);
-  std::printf("device=%s SMs=%d fixed_flop_per_omma=%.0f\n",p.name,p.multiProcessorCount,FLOP_PER_SPARSE_OMMA);
-  double a2=bench<2,1,16>("2X one-bank16",blocks,block,iters,sink,a,b);
-  double b2=bench<2,2,8>("2X two-bank8",blocks,block,iters,sink,a,b);
-  double c2=bench<2,2,16>("2X two-bank16",blocks,block,iters,sink,a,b);
-  double a4=bench<4,1,16>("4X one-bank16",blocks,block,iters,sink,a,b);
-  double b4=bench<4,2,8>("4X two-bank8",blocks,block,iters,sink,a,b);
-  double c4=bench<4,2,16>("4X two-bank16",blocks,block,iters,sink,a,b);
-  std::printf("fair same-instruction-count ratios: 2X two/one=%.4fx  4X two/one=%.4fx\n",b2/a2,b4/a4);
-  std::printf("target ratios vs 2PF: 2Xbest=%.3f%% 4Xbest=%.3f%%\n",100.0*std::max({a2,b2,c2})/2000.0,100.0*std::max({a4,b4,c4})/2000.0);
+  const double target_issue=2.0e15/(double(p.multiProcessorCount)*2.5e9*FLOP_PER_SPARSE_OMMA);
+  std::printf("device=%s SMs=%d fixed_flop_per_omma=%.0f target_2PF_OMMA_per_SM_cycle@2.5GHz=%.6f\n",
+              p.name,p.multiProcessorCount,FLOP_PER_SPARSE_OMMA,target_issue);
+  for(int block:blocksizes) for(int bpsm:bpsms){
+    double a2=bench<2,1,16>("2X one-bank16",p.multiProcessorCount,bpsm,block,iters,sink,a,b);
+    double b2=bench<2,2,8>("2X two-bank8",p.multiProcessorCount,bpsm,block,iters,sink,a,b);
+    double a4=bench<4,1,16>("4X one-bank16",p.multiProcessorCount,bpsm,block,iters,sink,a,b);
+    double b4=bench<4,2,8>("4X two-bank8",p.multiProcessorCount,bpsm,block,iters,sink,a,b);
+    std::printf("  FAIR block=%d b/SM=%d 2X_two/one=%.4fx 4X_two/one=%.4fx\n",block,bpsm,b2/a2,b4/a4);
+  }
+  // High-ILP 32-instruction variants, separately because they intentionally double instruction count.
+  for(int block:blocksizes) for(int bpsm:bpsms){
+    bench<2,2,16>("2X two-bank16",p.multiProcessorCount,bpsm,block,iters,sink,a,b);
+    bench<4,2,16>("4X two-bank16",p.multiProcessorCount,bpsm,block,iters,sink,a,b);
+  }
   cudaEventDestroy(a); cudaEventDestroy(b); cudaFree(sink); return 0;
 }
