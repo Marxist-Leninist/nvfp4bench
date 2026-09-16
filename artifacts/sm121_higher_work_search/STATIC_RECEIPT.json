@@ -1,0 +1,45 @@
+{
+  "artifacts": {
+    "omma_mode_field_14_19.json": {
+      "bytes": 9204,
+      "sha256": "51edd0aade03f4b5e19fa50354d61369ad754fa276db1210f51aca2e92929372"
+    },
+    "sparse_int4_lowering.json": {
+      "bytes": 1286,
+      "sha256": "da94ad866f59b4f1e05774352cead63832b9f9443fa4dc30d59f981734e39903"
+    },
+    "sparse_int4_probe.cu": {
+      "bytes": 2073,
+      "sha256": "10666a182be6ef2b32a952ea145aa9df06e4f021809c4f1bf73c2d8407355812"
+    },
+    "tensor_subpipes.json": {
+      "bytes": 450,
+      "sha256": "512b7c4a1f34c7bdff4c976afa273bff2ac1cecd4ec8829e376368f20d1c94c5"
+    }
+  },
+  "findings": {
+    "hidden_wider_work_mode_in_full_bits_78_83": false,
+    "local_omma_mode_field_exhausted": true,
+    "local_omma_mode_valid_classes": [
+      "OMMA.SF.16864.F32.E2M1.E2M1.E8 R60, R68, R72, R60, R2, R0, URZ",
+      "OMMA.SF.16864.F32.E2M1.E2M1.E8.4X R60, R68, R72, R60, R2, R0, URZ",
+      "OMMA.SF.16864.F32.E2M1.E2M1.UE4M3 R60, R68, R72, R60, R2, R0, URZ",
+      "OMMA.SF.16864.F32.E2M1.E2M1.UE4M3.4X R60, R68, R72, R60, R2, R0, URZ",
+      "OMMA.SF.SP.168128.F32.E2M1.E2M1.E8 R60, R68, R72, R60, R2, R0, URZ, 0x0",
+      "OMMA.SF.SP.168128.F32.E2M1.E2M1.E8.4X R60, R68, R72, R60, R2, R0, URZ, 0x0",
+      "OMMA.SF.SP.168128.F32.E2M1.E2M1.UE4M3 R60, R68, R72, R60, R2, R0, URZ, 0x0",
+      "OMMA.SF.SP.168128.F32.E2M1.E2M1.UE4M3.4X R60, R68, R72, R60, R2, R0, URZ, 0x0"
+    ],
+    "native_sparse_int4_k128_machine_op": false,
+    "sparse_int4_lowering": "2x IMMA.SP.16864.S8.S8 plus helper overhead",
+    "stall_topology_lane": "closed_by_silicon_near_952_tflops",
+    "tensor_subpipes_exposed_by_ncu": [
+      "HMMA",
+      "IMMA"
+    ],
+    "third_tensor_subpipe": false
+  },
+  "open_lane": "Search outside the known OMMA mode field / known opcode family for a genuinely higher-work-per-issued-instruction SM121 machine operation; otherwise investigate exact/quality-qualified dual-HMMA+IMMA algorithms rather than stall control.",
+  "runtime_executed": false,
+  "schema": "agillm.sm121.higher-work-static-receipt.v1"
+}

@@ -1,0 +1,32 @@
+{
+  "caller_helper_calls_in_16_logical_mma_body": 16,
+  "conclusion": "SM121 does not expose the logical sparse INT4 k128 PTX operation as one native full-width S4 machine instruction. ptxas decomposes it into two k64 S8 sparse IMMA instructions plus substantial unpack/repack/helper overhead.",
+  "helper_imma_forms": [
+    "IMMA.SP.16864.S8.S8",
+    "IMMA.SP.16864.S8.S8"
+  ],
+  "helper_instruction_counts": {
+    "BRA": 1,
+    "CALL.REL.NOINC": 2,
+    "IADD3": 4,
+    "IMAD.SHL.U32": 6,
+    "IMAD.U32": 1,
+    "IMMA.SP.16864.S8.S8": 2,
+    "LOP3.LUT": 15,
+    "MOV": 21,
+    "NOP": 4,
+    "RET.REL.NODEC": 1,
+    "SHF.R.S32.HI": 8,
+    "ULOP3.LUT": 15,
+    "USHF.L.U32": 7,
+    "USHF.R.S32.HI": 8
+  },
+  "helper_sass_static_path": "/workspace/gb10_2pflop_openfork_20260916/static_recon/control_probe2/omma_sparse_int4/s4_helper.sass",
+  "imma_instructions_per_logical_s4_mma": 2,
+  "native_s4_k128_sass_observed": false,
+  "ptx_logical_form": "mma.sp::ordered_metadata.sync.aligned.m16n8k128.row.col.s32.s4.s4.s32",
+  "runtime_executed": false,
+  "schema": "agillm.sm121.sparse-int4-lowering-static.v1",
+  "sm121_sass_lowering": "helper_decomposition",
+  "source_probe_static_path": "/workspace/gb10_2pflop_openfork_20260916/static_recon/control_probe2/omma_sparse_int4/mix_s4.cu"
+}

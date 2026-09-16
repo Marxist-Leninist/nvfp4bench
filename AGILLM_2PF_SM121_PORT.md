@@ -174,3 +174,16 @@ Matched 31-OMMA timing (`48 SM`, clock attribute `2418 MHz`, `384` blocks, `128`
 This is a decisive negative result for the reduced-stall shortcut. Moving from stall8/y0 to the best stall7/y1 candidate improves median throughput by only about 0.89%, and all variants remain near one quarter OMMA per SM cycle rather than the `0.508626` OMMA/SM/cycle required for 2 PFLOP/s under the fixed accounting. That materially strengthens the shared-OMMA-backend-limit hypothesis. Future 2PF work should prioritize mechanisms that expose genuinely additional tensor issue capacity, not further small same-warp stall reductions.
 
 Raw runtime receipt: `artifacts/sm121_stall_runtime_20260916/summary.json`. The corrected index-space explanation is preserved in `artifacts/sm121_stall_runtime_20260916/SILICON_INDEX_CORRECTION.json`.
+
+
+## Higher-work-per-issued-instruction search
+
+The guarded stall/yield and topology experiments saturate around **~952 TFLOP/s**, roughly 0.25 sparse-OMMA/SM/cycle, so reduced per-warp eligibility is no longer treated as a path to 2 PF. The active direction is more useful work per issued hardware instruction or genuinely independent tensor subpipe work.
+
+Static SM121 results now close several tempting shortcuts:
+
+- CUDA 13 accepts logical sparse INT4 `m16n8k128`, but `ptxas -arch=sm_121a` lowers each logical S4 operation through a helper containing **two `IMMA.SP.16864.S8.S8`** instructions plus extensive unpack/repack work. There is no observed native full-width S4 k128 machine instruction.
+- The GB20B / CC 12.1 Nsight metric inventory exposes **HMMA** (including OMMA) and **IMMA** tensor subpipes, with no third tensor subpipe family.
+- An exhaustive 64-value sweep of the local OMMA machine mode field (full instruction bits 78..83) decodes only the expected dense-k64 / sparse-k128, E8 / UE4M3, and 4X / non-4X combinations. It exposes **no wider-work OMMA mode**.
+
+Receipts and compact reproducer artifacts are tracked under `artifacts/sm121_higher_work_search/`. The raw unrelated-opcode-family search remains open; none of these static results is itself a runtime throughput claim.

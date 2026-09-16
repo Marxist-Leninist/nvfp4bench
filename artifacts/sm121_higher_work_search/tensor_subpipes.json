@@ -1,0 +1,12 @@
+{
+  "compute_capability": "12.1",
+  "ncu_chip_profile": "GB20B",
+  "note": "Offline Nsight Compute GB20B metric catalog exposes HMMA and IMMA tensor subpipe counters. Generic bit-operation counters exist, but no separate BMMA tensor-subpipe family is exposed.",
+  "runtime_executed": false,
+  "schema": "agillm.sm121.tensor-subpipe-static.v1",
+  "tensor_instruction_subpipes": [
+    "HMMA",
+    "IMMA"
+  ],
+  "third_tensor_subpipe_observed": false
+}

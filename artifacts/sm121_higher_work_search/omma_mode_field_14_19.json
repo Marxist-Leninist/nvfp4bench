@@ -1,0 +1,466 @@
+{
+  "addr": "0x350",
+  "base_sha256": "44be7d70e9f74b4326c759a3a16aeac92715c25ad827312208813cef56f3d769",
+  "base_value": 20,
+  "full_instruction_bits": [
+    78,
+    83
+  ],
+  "function": "pure_issue_witness",
+  "high_field_bits": [
+    14,
+    19
+  ],
+  "rows": [
+    {
+      "bits": "000000",
+      "high64": "0x000fde0000003e3c",
+      "op": "OMMA.SF.16864.F32.E2M1.E2M1.E8.4X R60, R68, R72, R60, R2, R0, URZ",
+      "rc": 0,
+      "value": 0
+    },
+    {
+      "bits": "000001",
+      "high64": "0x000fde0000007e3c",
+      "op": null,
+      "rc": 0,
+      "value": 1
+    },
+    {
+      "bits": "000010",
+      "high64": "0x000fde000000be3c",
+      "op": null,
+      "rc": 0,
+      "value": 2
+    },
+    {
+      "bits": "000011",
+      "high64": "0x000fde000000fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 3
+    },
+    {
+      "bits": "000100",
+      "high64": "0x000fde0000013e3c",
+      "op": "OMMA.SF.SP.168128.F32.E2M1.E2M1.E8.4X R60, R68, R72, R60, R2, R0, URZ, 0x0",
+      "rc": 0,
+      "value": 4
+    },
+    {
+      "bits": "000101",
+      "high64": "0x000fde0000017e3c",
+      "op": null,
+      "rc": 0,
+      "value": 5
+    },
+    {
+      "bits": "000110",
+      "high64": "0x000fde000001be3c",
+      "op": null,
+      "rc": 0,
+      "value": 6
+    },
+    {
+      "bits": "000111",
+      "high64": "0x000fde000001fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 7
+    },
+    {
+      "bits": "001000",
+      "high64": "0x000fde0000023e3c",
+      "op": "OMMA.SF.16864.F32.E2M1.E2M1.E8.4X R60, R68, R72, R60, R2, R0, URZ",
+      "rc": 0,
+      "value": 8
+    },
+    {
+      "bits": "001001",
+      "high64": "0x000fde0000027e3c",
+      "op": null,
+      "rc": 0,
+      "value": 9
+    },
+    {
+      "bits": "001010",
+      "high64": "0x000fde000002be3c",
+      "op": null,
+      "rc": 0,
+      "value": 10
+    },
+    {
+      "bits": "001011",
+      "high64": "0x000fde000002fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 11
+    },
+    {
+      "bits": "001100",
+      "high64": "0x000fde0000033e3c",
+      "op": null,
+      "rc": 0,
+      "value": 12
+    },
+    {
+      "bits": "001101",
+      "high64": "0x000fde0000037e3c",
+      "op": null,
+      "rc": 0,
+      "value": 13
+    },
+    {
+      "bits": "001110",
+      "high64": "0x000fde000003be3c",
+      "op": null,
+      "rc": 0,
+      "value": 14
+    },
+    {
+      "bits": "001111",
+      "high64": "0x000fde000003fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 15
+    },
+    {
+      "bits": "010000",
+      "high64": "0x000fde0000043e3c",
+      "op": "OMMA.SF.16864.F32.E2M1.E2M1.UE4M3.4X R60, R68, R72, R60, R2, R0, URZ",
+      "rc": 0,
+      "value": 16
+    },
+    {
+      "bits": "010001",
+      "high64": "0x000fde0000047e3c",
+      "op": null,
+      "rc": 0,
+      "value": 17
+    },
+    {
+      "bits": "010010",
+      "high64": "0x000fde000004be3c",
+      "op": null,
+      "rc": 0,
+      "value": 18
+    },
+    {
+      "bits": "010011",
+      "high64": "0x000fde000004fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 19
+    },
+    {
+      "bits": "010100",
+      "high64": "0x000fde0000053e3c",
+      "op": "OMMA.SF.SP.168128.F32.E2M1.E2M1.UE4M3.4X R60, R68, R72, R60, R2, R0, URZ, 0x0",
+      "rc": 0,
+      "value": 20
+    },
+    {
+      "bits": "010101",
+      "high64": "0x000fde0000057e3c",
+      "op": null,
+      "rc": 0,
+      "value": 21
+    },
+    {
+      "bits": "010110",
+      "high64": "0x000fde000005be3c",
+      "op": null,
+      "rc": 0,
+      "value": 22
+    },
+    {
+      "bits": "010111",
+      "high64": "0x000fde000005fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 23
+    },
+    {
+      "bits": "011000",
+      "high64": "0x000fde0000063e3c",
+      "op": "OMMA.SF.16864.F32.E2M1.E2M1.UE4M3.4X R60, R68, R72, R60, R2, R0, URZ",
+      "rc": 0,
+      "value": 24
+    },
+    {
+      "bits": "011001",
+      "high64": "0x000fde0000067e3c",
+      "op": null,
+      "rc": 0,
+      "value": 25
+    },
+    {
+      "bits": "011010",
+      "high64": "0x000fde000006be3c",
+      "op": null,
+      "rc": 0,
+      "value": 26
+    },
+    {
+      "bits": "011011",
+      "high64": "0x000fde000006fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 27
+    },
+    {
+      "bits": "011100",
+      "high64": "0x000fde0000073e3c",
+      "op": null,
+      "rc": 0,
+      "value": 28
+    },
+    {
+      "bits": "011101",
+      "high64": "0x000fde0000077e3c",
+      "op": null,
+      "rc": 0,
+      "value": 29
+    },
+    {
+      "bits": "011110",
+      "high64": "0x000fde000007be3c",
+      "op": null,
+      "rc": 0,
+      "value": 30
+    },
+    {
+      "bits": "011111",
+      "high64": "0x000fde000007fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 31
+    },
+    {
+      "bits": "100000",
+      "high64": "0x000fde0000083e3c",
+      "op": "OMMA.SF.16864.F32.E2M1.E2M1.E8 R60, R68, R72, R60, R2, R0, URZ",
+      "rc": 0,
+      "value": 32
+    },
+    {
+      "bits": "100001",
+      "high64": "0x000fde0000087e3c",
+      "op": null,
+      "rc": 0,
+      "value": 33
+    },
+    {
+      "bits": "100010",
+      "high64": "0x000fde000008be3c",
+      "op": null,
+      "rc": 0,
+      "value": 34
+    },
+    {
+      "bits": "100011",
+      "high64": "0x000fde000008fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 35
+    },
+    {
+      "bits": "100100",
+      "high64": "0x000fde0000093e3c",
+      "op": "OMMA.SF.SP.168128.F32.E2M1.E2M1.E8 R60, R68, R72, R60, R2, R0, URZ, 0x0",
+      "rc": 0,
+      "value": 36
+    },
+    {
+      "bits": "100101",
+      "high64": "0x000fde0000097e3c",
+      "op": null,
+      "rc": 0,
+      "value": 37
+    },
+    {
+      "bits": "100110",
+      "high64": "0x000fde000009be3c",
+      "op": null,
+      "rc": 0,
+      "value": 38
+    },
+    {
+      "bits": "100111",
+      "high64": "0x000fde000009fe3c",
+      "op": null,
+      "rc": 0,
+      "value": 39
+    },
+    {
+      "bits": "101000",
+      "high64": "0x000fde00000a3e3c",
+      "op": "OMMA.SF.16864.F32.E2M1.E2M1.E8 R60, R68, R72, R60, R2, R0, URZ",
+      "rc": 0,
+      "value": 40
+    },
+    {
+      "bits": "101001",
+      "high64": "0x000fde00000a7e3c",
+      "op": null,
+      "rc": 0,
+      "value": 41
+    },
+    {
+      "bits": "101010",
+      "high64": "0x000fde00000abe3c",
+      "op": null,
+      "rc": 0,
+      "value": 42
+    },
+    {
+      "bits": "101011",
+      "high64": "0x000fde00000afe3c",
+      "op": null,
+      "rc": 0,
+      "value": 43
+    },
+    {
+      "bits": "101100",
+      "high64": "0x000fde00000b3e3c",
+      "op": null,
+      "rc": 0,
+      "value": 44
+    },
+    {
+      "bits": "101101",
+      "high64": "0x000fde00000b7e3c",
+      "op": null,
+      "rc": 0,
+      "value": 45
+    },
+    {
+      "bits": "101110",
+      "high64": "0x000fde00000bbe3c",
+      "op": null,
+      "rc": 0,
+      "value": 46
+    },
+    {
+      "bits": "101111",
+      "high64": "0x000fde00000bfe3c",
+      "op": null,
+      "rc": 0,
+      "value": 47
+    },
+    {
+      "bits": "110000",
+      "high64": "0x000fde00000c3e3c",
+      "op": "OMMA.SF.16864.F32.E2M1.E2M1.UE4M3 R60, R68, R72, R60, R2, R0, URZ",
+      "rc": 0,
+      "value": 48
+    },
+    {
+      "bits": "110001",
+      "high64": "0x000fde00000c7e3c",
+      "op": null,
+      "rc": 0,
+      "value": 49
+    },
+    {
+      "bits": "110010",
+      "high64": "0x000fde00000cbe3c",
+      "op": null,
+      "rc": 0,
+      "value": 50
+    },
+    {
+      "bits": "110011",
+      "high64": "0x000fde00000cfe3c",
+      "op": null,
+      "rc": 0,
+      "value": 51
+    },
+    {
+      "bits": "110100",
+      "high64": "0x000fde00000d3e3c",
+      "op": "OMMA.SF.SP.168128.F32.E2M1.E2M1.UE4M3 R60, R68, R72, R60, R2, R0, URZ, 0x0",
+      "rc": 0,
+      "value": 52
+    },
+    {
+      "bits": "110101",
+      "high64": "0x000fde00000d7e3c",
+      "op": null,
+      "rc": 0,
+      "value": 53
+    },
+    {
+      "bits": "110110",
+      "high64": "0x000fde00000dbe3c",
+      "op": null,
+      "rc": 0,
+      "value": 54
+    },
+    {
+      "bits": "110111",
+      "high64": "0x000fde00000dfe3c",
+      "op": null,
+      "rc": 0,
+      "value": 55
+    },
+    {
+      "bits": "111000",
+      "high64": "0x000fde00000e3e3c",
+      "op": "OMMA.SF.16864.F32.E2M1.E2M1.UE4M3 R60, R68, R72, R60, R2, R0, URZ",
+      "rc": 0,
+      "value": 56
+    },
+    {
+      "bits": "111001",
+      "high64": "0x000fde00000e7e3c",
+      "op": null,
+      "rc": 0,
+      "value": 57
+    },
+    {
+      "bits": "111010",
+      "high64": "0x000fde00000ebe3c",
+      "op": null,
+      "rc": 0,
+      "value": 58
+    },
+    {
+      "bits": "111011",
+      "high64": "0x000fde00000efe3c",
+      "op": null,
+      "rc": 0,
+      "value": 59
+    },
+    {
+      "bits": "111100",
+      "high64": "0x000fde00000f3e3c",
+      "op": null,
+      "rc": 0,
+      "value": 60
+    },
+    {
+      "bits": "111101",
+      "high64": "0x000fde00000f7e3c",
+      "op": null,
+      "rc": 0,
+      "value": 61
+    },
+    {
+      "bits": "111110",
+      "high64": "0x000fde00000fbe3c",
+      "op": null,
+      "rc": 0,
+      "value": 62
+    },
+    {
+      "bits": "111111",
+      "high64": "0x000fde00000ffe3c",
+      "op": null,
+      "rc": 0,
+      "value": 63
+    }
+  ],
+  "runtime_executed": false,
+  "schema": "agillm.sm121.omma-mode-field14-19-sweep.v1"
+}
