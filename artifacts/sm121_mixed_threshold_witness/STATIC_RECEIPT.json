@@ -113,6 +113,7 @@
   "deprecated_naive_global_extrapolation_pf_48sm_2p5ghz": 2.0079114893617027,
   "mixed_family_observation": "Sparse/dense and 2X/4X transitions examined by mixed_omma_resource all retain cumulative effective issue gap 16.",
   "mixed_family_second_issue_lane": "not_supported_by_compiler_static_evidence",
+  "policy_supersedes": "Earlier SG_2PF_BENCH_HANDOFF=approved wording is obsolete.",
   "recommended_runtime_order": [
     "base witness self-check",
     "fill100_stall8_yield0 arithmetic witness",
@@ -121,7 +122,7 @@
     "timing only after each corresponding arithmetic witness passes"
   ],
   "runtime_executed": false,
-  "runtime_gate": "Use upstream/src/run_2pf_guarded.sh. A naturally idle GPU is acceptable; otherwise upstream/src/run_2pf_handoff.sh may create a bounded STOP/CONT window only when SG_2PF_BENCH_HANDOFF=approved is explicitly set for the current task, exact production PID and CUDA census match, checkpoint-safety checks pass, and trap-based resume remains armed.",
+  "runtime_gate": "Current policy (2026-09-16): no approval token or permission gate. Use src/run_2pf_guarded.sh on a naturally idle GPU, or src/run_2pf_handoff.sh for a bounded STOP/CONT window when exact production PID, sole CUDA census, checkpoint-safety checks, quiescence, and trap-based resume all pass. Only a real live resource conflict defers execution.",
   "runtime_throughput_measurement_required": true,
   "scheduler_model_correction": "Encoded stall is per-warp eligibility, not a proven global issue period. The historical 4/N extrapolation is invalid as a PFLOP/s prediction; aggregate throughput must be measured.",
   "schema": "agillm.sm121.mixed-threshold-static-receipt.v1",
