@@ -1,0 +1,26 @@
+{
+  "compute_capability": "12.1",
+  "container_CAP_PERFMON": false,
+  "container_CAP_SYS_ADMIN": false,
+  "device_marketing_name": "NVIDIA GB10",
+  "driver_RmProfilingAdminOnly": 1,
+  "live_counter_collection_status": "blocked_ERR_NVGPUCTRPERM",
+  "metric_evidence_sha256": "40a7fac63307e241395b6ceebfe6f00c13842d54099700f5d4cb607ab691a3a1",
+  "ncu_chip_identity": "GB20B",
+  "ncu_role": "optional corroboration only when host permits counters",
+  "ncu_version": "2025.3.1.0",
+  "offline_catalog_metrics_present": true,
+  "performance_claim_source": "arithmetic witness + exact SASS OMMA count + uninstrumented CUDA-event timing",
+  "required_metrics": [
+    "sm__inst_executed_pipe_tensor_subpipe_hmma.sum",
+    "sm__ops_path_tensor_src_fp4_dst_fp32_sparsity_on.sum",
+    "sm__pipe_tensor_subpipe_hmma_cycles_active.sum",
+    "sm__inst_issued.sum",
+    "sm__issue_active.sum",
+    "sm__cycles_elapsed.avg",
+    "gpu__time_duration.sum"
+  ],
+  "runtime_2pf_executed": false,
+  "schema": "agillm.sm121.counter-proof-static-receipt.v1",
+  "sysfs_read_only": true
+}

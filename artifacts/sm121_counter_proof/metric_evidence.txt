@@ -1,0 +1,17 @@
+Device identity observed on Vast 51049010:
+NVIDIA GB10 (GB20B), compute capability 12.1, PCI device 0x2E1210DE
+
+Nsight Compute 2025.3.1 offline GB20b catalog exposes:
+sm__inst_executed_pipe_tensor_subpipe_hmma.sum  # HMMA/QMMA/OMMA warp instructions
+sm__ops_path_tensor_src_fp4_dst_fp32_sparsity_on.sum
+sm__pipe_tensor_subpipe_hmma_cycles_active.sum
+sm__inst_issued.sum
+sm__issue_active.sum
+sm__cycles_elapsed.avg
+gpu__time_duration.sum
+
+Live device query on this Vast host currently returns ERR_NVGPUCTRPERM.
+/proc/driver/nvidia/params: RmProfilingAdminOnly: 1
+Container capabilities exclude CAP_SYS_ADMIN and CAP_PERFMON; /sys is mounted read-only.
+Therefore counter collection is optional corroboration, not the primary timing proof on this host.
+Primary proof: arithmetic witness PASS + exact SASS OMMA count + uninstrumented CUDA-event timing.

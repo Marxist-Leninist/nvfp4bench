@@ -139,3 +139,15 @@ A conservative threshold candidate was derived from the 31-OMMA `fill100_stall8_
 - runtime status: **not executed**; this is not a measured 2-PF result
 
 The candidate and receipts are tracked under `artifacts/sm121_mixed_threshold_witness/`. Runtime promotion remains fail-closed: arithmetic witness first, timing only after correctness passes in a naturally idle GPU window.
+
+
+## Hardware proof protocol on Vast 51049010
+
+The installed device reports `NVIDIA GB10`, compute capability 12.1, while Nsight identifies the metric profile as `GB20B`. Nsight Compute 2025.3.1 exposes direct SM121 counters for the HMMA/QMMA/OMMA tensor subpipe and sparse FP4 math ops. However the current Vast host sets `RmProfilingAdminOnly=1`; this container lacks `CAP_SYS_ADMIN`/`CAP_PERFMON`, so live counter collection returns `ERR_NVGPUCTRPERM`.
+
+Accordingly the performance proof is deliberately two-layered:
+
+1. **Primary, available now:** per-accumulator arithmetic witness must pass; exact SASS fixes the OMMA count; `time_pure_issue_guarded.sh` uses uninstrumented CUDA events and the unchanged 32,768 dense-equivalent FLOPs/OMMA accounting.
+2. **Optional corroboration:** `profile_pure_issue_guarded.sh` collects `sm__inst_executed_pipe_tensor_subpipe_hmma.sum`, sparse-FP4 ops, tensor-active cycles, issue counters and duration only when the host grants performance-counter access. It explicitly refuses `ERR_NVGPUCTRPERM`; an empty result can never be mistaken for zero work.
+
+Both launchers inherit the existing fail-closed `run_2pf_guarded.sh` policy and never stop or signal production to manufacture a benchmark window.
