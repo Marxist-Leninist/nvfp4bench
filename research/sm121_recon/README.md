@@ -69,3 +69,11 @@ A separate static dual-bank reconstruction (`src/peak_dual_omma_static.cu`) comp
 
 This proves the compiler can preserve two independent OMMA operand/accumulator banks cheaply in the 8+8 form,
 but it does **not** prove dual issue. Runtime throughput measurement is intentionally deferred while production owns GB10.
+
+## SM121 2-CTA software reconstruction is compiler-legal
+
+A static `__cluster_dims__(2,1,1)` probe compiles successfully for `sm_121a`. SASS contains explicit cluster metadata plus `CGAERRBAR`, `UCGABAR_ARV`, and `UCGABAR_WAIT`. A cluster-2 OMMA reconstruction therefore exists as a legal software building block even though hardware UTCOMMA/TCGEN05 is absent.
+
+`src/sm121_cluster2_omma_static.cu` combines an explicit two-CTA cluster with the legal sparse packed OMMA path and compiles with 78 registers, zero spills. This is not counted as hardware 2CTA MMA.
+
+The six legal issue-rate probe variants also compile statically with zero spills. One-bank16 uses 74 registers, two-bank8 uses 81, and two-bank16 uses 138 for both 2X/E8 and 4X/UE4M3 forms. The hot SASS stream remains one OMMA every 0x20 bytes in the fully unrolled core; the two-bank8 form occasionally has a 0x30-byte gap. Static scheduling therefore provides no evidence yet of a hidden second tensor issue opcode/domain.
