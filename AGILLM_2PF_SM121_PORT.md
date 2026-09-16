@@ -84,7 +84,7 @@ Controlled source probes compare an 8-OMMA true accumulator-dependency chain wit
 - sequence-opening/terminal form `0x000fe200...` decodes **stall=1, yield=1**;
 - NOP form `0x000fc200...` decodes **stall=1, yield=0**.
 
-The stall-field interpretation is independently calibrated by ordinary compiler-generated FFMA control words (`0x...fc800` -> stall 8, `0x...fca00` -> stall 10). The key inference is narrow: **ptxas does not relax sparse-OMMA scheduling merely because accumulators are independent.** It does *not* prove hardware accepts a shorter sparse-OMMA issue interval.
+The stall-field interpretation is independently calibrated by ordinary compiler-generated FFMA control words (`0x...fc800` -> stall 8, `0x...fca00` -> stall 10). It is also independently confirmed by Basalt (commit `ddf3ba0`), which defines the SM120/121 stall field at full-instruction bits 108:105 (equivalent to upper-64 bits 44:41). Basalt treats encoded stall `0` as a long/safe sentinel (`effective_stall(0)=1024`), so zero is intentionally excluded from the reduced-stall runtime ladder. A prior helper artifact family patched byte13 bits 0..3 instead of exact bits 1..4; those files are explicitly rejected and must not be run. The key inference is narrow: **ptxas does not relax sparse-OMMA scheduling merely because accumulators are independent.** It does *not* prove hardware accepts a shorter sparse-OMMA issue interval.
 
 ### Active hardware question
 
