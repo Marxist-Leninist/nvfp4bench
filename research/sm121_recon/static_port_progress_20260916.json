@@ -1,0 +1,33 @@
+{
+  "schema": "agillm-sm121-2pf-static-progress-v1",
+  "target": "GB10 SM121 fixed-clock 2PF research",
+  "gpu_execution": false,
+  "findings": {
+    "tcgen05_sm100a_compiles": true,
+    "tcgen05_sm121a_compiles": false,
+    "sm100_tcgen05_sass": [
+      "UTCOMMA.4X",
+      "UTCOMMA.2CTA.4X"
+    ],
+    "sm121_native_sass": "OMMA.SF.SP.168128.F32.E2M1.E2M1.UE4M3.4X",
+    "relabel_sm100_cubin_as_sm121_decodes": false,
+    "sm121_legal_packed_dense_shape": "m16n8k64",
+    "sm121_legal_packed_sparse_shape": "m16n8k128",
+    "sm121_explicit_2cta_cluster_compiles": true,
+    "matched_plain_vs_cluster_omma_instruction_words_identical": true,
+    "matched_plain_registers": 74,
+    "matched_cluster_registers": 74,
+    "matched_plain_spills": 0,
+    "matched_cluster_spills": 0,
+    "multibank_registers": {
+      "1x16": 78,
+      "2x8": 89,
+      "4x4": 111,
+      "8x2": 144,
+      "16x1": 194
+    },
+    "multibank_spills_all_zero": true,
+    "static_best_followup": "Benchmark 1x16 vs 2x8 vs 4x4 and plain vs cluster only in an explicit isolated GPU window; current source work must not interrupt RPV16."
+  },
+  "interpretation": "SM121 cluster mode does not rewrite OMMA into a hidden 2CTA tensor instruction. Any >1PF result must come from issue/scheduler behavior or a distinct legal opcode, not FLOP recounting."
+}
