@@ -1,0 +1,55 @@
+{
+  "schema": "agillm-sm121-2pf-opcode-density-v1",
+  "gpu_executed": false,
+  "opcode_atlas": {
+    "base_opcode_low_word": "0x703002040404747f",
+    "byte0_original": "0x7f",
+    "byte0_recognized_ops": 17,
+    "byte0_invalid_variants": 237,
+    "byte0_omma_values": [
+      127
+    ],
+    "byte1_original": "0x74",
+    "byte1_invalid_variants": 240,
+    "byte1_omma_values": [
+      4,
+      20,
+      36,
+      52,
+      68,
+      84,
+      100,
+      116,
+      132,
+      148,
+      164,
+      180,
+      196,
+      212,
+      228,
+      244
+    ],
+    "conclusion": "No adjacent low-two-byte encoding exposed a second tensor opclass; recognized non-OMMA values decode as unrelated scalar/vector instructions."
+  },
+  "sass_density": {
+    "base_static_omma": 16,
+    "eligible_compiler_nop_slots": 14,
+    "patched_25pct_static_omma": 20,
+    "patched_50pct_static_omma": 23,
+    "patched_100pct_static_omma": 30,
+    "base_median_omma_byte_gap": 32,
+    "patched_100pct_median_omma_byte_gap": 16,
+    "nvdisasm_accepts_all_patched_cubins": true,
+    "execution_verified": false,
+    "interpretation": "SM121 cubin remains structurally decodable after replacing compiler NOP slots with independent OMMA encodings. This is not evidence of extra hardware throughput until an isolated runtime window measures issue rate and validates arithmetic."
+  },
+  "matched_cluster": {
+    "plain_registers": 74,
+    "cluster2_registers": 74,
+    "spills_plain": 0,
+    "spills_cluster2": 0,
+    "first_omma_instruction_words_identical": true,
+    "conclusion": "Explicit 2-CTA cluster metadata does not transform the warp-level OMMA instruction encoding."
+  },
+  "next_static": "Build a fully witnessed patched-cubin benchmark package and inspect control/dependency fields; do not run while RPV16 owns GPU."
+}
