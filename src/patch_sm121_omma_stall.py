@@ -4,6 +4,7 @@ from pathlib import Path
 STALL_SHIFT=41
 STALL_MASK=0xF<<STALL_SHIFT
 YIELD_SHIFT=45
+YIELD_MASK=1<<YIELD_SHIFT
 
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def section(p,name):
@@ -24,7 +25,8 @@ def control_at(data,pos): return int.from_bytes(data[pos+8:pos+16],'little')
 def with_stall(ctrl,stall): return (ctrl & ~STALL_MASK) | ((stall & 0xF)<<STALL_SHIFT)
 def stall(ctrl): return (ctrl>>STALL_SHIFT)&0xF
 def yld(ctrl): return (ctrl>>YIELD_SHIFT)&1
-ap=argparse.ArgumentParser(); ap.add_argument('src'); ap.add_argument('dst'); ap.add_argument('--stall',type=int,required=True); ap.add_argument('--function',default='sass_patch_target_v2'); ap.add_argument('--from-stall',type=int,default=15); ap.add_argument('--manifest',required=True); a=ap.parse_args()
+def with_yield(ctrl,bit): return (ctrl & ~YIELD_MASK) | ((bit & 1)<<YIELD_SHIFT)
+ap=argparse.ArgumentParser(); ap.add_argument('src'); ap.add_argument('dst'); ap.add_argument('--stall',type=int,required=True); ap.add_argument('--yield-bit',type=int,choices=[0,1],default=None); ap.add_argument('--function',default='sass_patch_target_v2'); ap.add_argument('--from-stall',type=int,default=15); ap.add_argument('--manifest',required=True); a=ap.parse_args()
 if not 0<=a.stall<=15: raise SystemExit('stall out of range')
 src=Path(a.src); dst=Path(a.dst); shutil.copy2(src,dst)
 A=src.read_bytes(); D=bytearray(A); off,size=section(src,'.text.'+a.function); before=disasm(src,a.function)
@@ -34,8 +36,9 @@ for addr,op in before:
  pos=off+addr; c=control_at(D,pos); old=stall(c)
  if old!=a.from_stall: continue
  nc=with_stall(c,a.stall)
+ if a.yield_bit is not None: nc=with_yield(nc,a.yield_bit)
  D[pos+8:pos+16]=nc.to_bytes(8,'little')
- patch.append({'addr':f'0x{addr:x}','old_stall':old,'new_stall':a.stall,'yield':yld(c),'old_ctrl':f'0x{c:016x}','new_ctrl':f'0x{nc:016x}'})
+ patch.append({'addr':f'0x{addr:x}','old_stall':old,'new_stall':a.stall,'old_yield':yld(c),'new_yield':yld(nc),'old_ctrl':f'0x{c:016x}','new_ctrl':f'0x{nc:016x}'})
 dst.write_bytes(D); B=bytes(D); after=disasm(dst,a.function)
 # Semantic disassembly text must remain byte-for-byte equivalent at every instruction address.
 if before!=after:
@@ -46,8 +49,13 @@ if any(i<off or i>=off+size for i in changed): raise SystemExit('change outside 
 # Verify every OMMA selected now has exact requested stall and preserved yield/non-stall bits.
 for rec in patch:
  addr=int(rec['addr'],16); pos=off+addr; old=int(rec['old_ctrl'],16); new=control_at(B,pos)
- assert stall(new)==a.stall and yld(new)==yld(old)
- assert (new & ~STALL_MASK)==(old & ~STALL_MASK)
+ assert stall(new)==a.stall
+ if a.yield_bit is None:
+  assert yld(new)==yld(old)
+  assert (new & ~STALL_MASK)==(old & ~STALL_MASK)
+ else:
+  assert yld(new)==a.yield_bit
+  assert (new & ~(STALL_MASK|YIELD_MASK))==(old & ~(STALL_MASK|YIELD_MASK))
 # Ensure every changed bit belongs to the stall mask of a selected instruction.
 allowed=set()
 for rec in patch:
@@ -56,6 +64,6 @@ for rec in patch:
  for j,(x,y) in enumerate(zip(old.to_bytes(8,'little'),new.to_bytes(8,'little'))):
   if x!=y: allowed.add(pos+j)
 if set(changed)!=allowed: raise SystemExit('unexpected changed bytes')
-manifest={'schema':'agillm.sm121.exact-stall-patch.v2','function':a.function,'source':str(src),'output':str(dst),'source_sha256':sha(src),'output_sha256':sha(dst),'bytes':len(B),'from_stall':a.from_stall,'target_stall':a.stall,'patched_omma_count':len(patch),'patches':patch,'proof':{'semantic_disasm_identical':True,'all_changes_inside_target_text':True,'only_stall_bits_changed':True,'yield_preserved':True,'all_other_control_bits_preserved':True,'file_size_identical':len(A)==len(B),'changed_byte_count':len(changed)}}
+manifest={'schema':'agillm.sm121.exact-stall-yield-patch.v3','function':a.function,'source':str(src),'output':str(dst),'source_sha256':sha(src),'output_sha256':sha(dst),'bytes':len(B),'from_stall':a.from_stall,'target_stall':a.stall,'target_yield':a.yield_bit,'patched_omma_count':len(patch),'patches':patch,'proof':{'semantic_disasm_identical':True,'all_changes_inside_target_text':True,'only_stall_and_optional_yield_bits_changed':True,'yield_preserved':a.yield_bit is None,'yield_targeted':a.yield_bit,'all_other_control_bits_preserved':True,'file_size_identical':len(A)==len(B),'changed_byte_count':len(changed)}}
 Path(a.manifest).write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
 print(json.dumps({'ok':True,'target_stall':a.stall,'patched':len(patch),'changed_bytes':len(changed),'sha256':manifest['output_sha256']}))
