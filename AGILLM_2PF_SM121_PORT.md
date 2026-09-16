@@ -106,7 +106,8 @@ The active question is therefore no longer “find a bigger FLOP count”. It is
 4. `src/peak_sass_patch_target.cu` + `src/patch_sm121_omma_nops.py`: countable NOP-fill series. Static cubins contain 16/20/23/26/30 sparse OMMAs per warp-iteration for 0/25/50/75/100% fill. NVIDIA disassemblers accept all variants.
 5. `src/verify_sass_patch_manifest.py`: byte proof that patched variants change only aligned 16-byte NOP slots inside the target `.text`; all nonpatched bytes, control flow, section layout and companion metadata remain byte-identical.
 6. `src/peak_sass_patch_target_v2.cu` + `src/run_sass_patch_correctness_v2.cpp`: bank-separated arithmetic witness. Inserted donor OMMAs remain inside their operand bank and timing is rejected unless each bank's accumulated output scales by the exact predicted `(8+added)/8` ratio.
-7. `src/run_2pf_guarded.sh`: fail-closed GPU guard. It never stops/signals a trainer and requires an explicit SG benchmark fence plus an empty CUDA/process census before launch.
+7. `src/run_2pf_guarded.sh`: fail-closed GPU guard. Default mode still requires an empty CUDA/process census. Explicit handoff mode permits exactly one verified T-state AGILLM production PID to retain its CUDA context while rejecting every other CUDA PID / known A/B harness. The guard itself never sends process signals.
+8. `src/run_2pf_handoff.sh`: bounded trap-protected handoff. It refuses checkpoint-temporary/open checkpoint state, requires production to be the sole CUDA PID, SIGSTOPs only that exact verified trainer, waits for GPU quiescence, runs the guarded benchmark, and SIGCONTs production on success, error, or signal.
 
 ### Promotion rule
 
@@ -117,13 +118,15 @@ No patched result counts as a 2PF improvement unless, in order:
 3. bank-separated arithmetic witness passes;
 4. wall-clock timing uses the fixed 32,768 FLOPs per sparse OMMA actually present in the binary;
 5. repeated trials show the gain and the measured OMMA/SM/cycle moves toward 0.508626;
-6. production RPV16/DBlock remains outside the benchmark window and is never stopped by this lane.
+6. production RPV16/DBlock performs no GPU compute during the benchmark. A current user-authorized bounded handoff may stop only the exact verified production PID after checkpoint-safety checks; a trap must resume it on every exit path. Stale coordination notes never constitute a lock or permission gate.
 
 
 
 ### Exact scheduler target math
 
-The observed ~1 PF result is numerically consistent with four scheduler issue domains each sustaining about one sparse OMMA every 16 cycles: `4/16 = 0.25 OMMA/SM/cycle`, which is 983.04 TFLOP/s at 48 SM * 2.5 GHz * 32,768 FLOPs/OMMA. If NOP removal plus a correct stall=8 schedule reaches one OMMA per 8 cycles per scheduler domain, the corresponding fixed-clock value is 0.5 OMMA/SM/cycle = **1.96608 PFLOP/s**. That is still below the strict 2 PF target. Stall=7 is therefore the first reduced-stall point whose scheduler ceiling exceeds the target: `4/7 = 0.57143 OMMA/SM/cycle`, or ~2.247 PFLOP/s before real scheduling/occupancy overheads. This is only a hypothesis for the guarded silicon test, not a performance claim.
+The measured ~1 PF result is about **0.25 OMMA/SM/cycle** under the fixed 32,768-FLOP accounting, but static evidence does **not** justify interpreting that as four independent scheduler domains each issuing one OMMA every 16 cycles. The compiler's stall15+NOP1 pattern is a **per-warp eligibility schedule**. With the measured ~74 registers/thread, 128-thread blocks and multiple resident warps, a 16-cycle wait can in principle be hidden by warp rotation; this makes a shared OMMA backend throughput limit (roughly one accepted OMMA per SM every four cycles) a stronger current hypothesis.
+
+Reduced-stall variants remain valuable falsification tests because they directly ask whether that compiler control schedule is conservative. The old arithmetic remains only a **control-field extrapolation**: a hypothetical stall8-limited 0.5 OMMA/SM/cycle corresponds to 1.96608 PFLOP/s; a hypothetical stall7-limited 4/7 OMMA/SM/cycle corresponds to ~2.247 PFLOP/s. Those are not hardware ceilings or expected throughput. Measured wall time and hardware counters, where available, decide the result.
 
 
 ## 2026-09-16 mixed 7/8-cycle threshold witness
@@ -132,13 +135,13 @@ A conservative threshold candidate was derived from the 31-OMMA `fill100_stall8_
 
 - steady stall mix: 5 x stall7 + 25 x stall8
 - nominal average steady interval: 7.833333 cycles
-- fixed-accounting scheduler ceiling: ~2.00791 PFLOP/s at 48 SM x 2.5 GHz x 32,768 dense-equivalent FLOPs per sparse OMMA
+- nominal control-field extrapolation: ~2.00791 PFLOP/s at 48 SM x 2.5 GHz x 32,768 dense-equivalent FLOPs per sparse OMMA; **not** a physical scheduler/backend ceiling
 - semantic SASS: unchanged
 - patch scope: exact stall bits only; yield=0 preserved on patched instructions
 - Basalt strict structural check: 168 instructions, 7 blocks, 405 dependencies, clean
 - runtime status: **not executed**; this is not a measured 2-PF result
 
-The candidate and receipts are tracked under `artifacts/sm121_mixed_threshold_witness/`. Runtime promotion remains fail-closed: arithmetic witness first, timing only after correctness passes in a naturally idle GPU window.
+The candidate and receipts are tracked under `artifacts/sm121_mixed_threshold_witness/`. Runtime promotion remains fail-closed: arithmetic witness first, timing only after correctness passes. Execution may use either a naturally idle GPU or the explicit bounded stopped-production handoff, provided checkpoint safety and exact-PID isolation pass.
 
 
 ## Hardware proof protocol on Vast 51049010
@@ -150,4 +153,4 @@ Accordingly the performance proof is deliberately two-layered:
 1. **Primary, available now:** per-accumulator arithmetic witness must pass; exact SASS fixes the OMMA count; `time_pure_issue_guarded.sh` uses uninstrumented CUDA events and the unchanged 32,768 dense-equivalent FLOPs/OMMA accounting.
 2. **Optional corroboration:** `profile_pure_issue_guarded.sh` collects `sm__inst_executed_pipe_tensor_subpipe_hmma.sum`, sparse-FP4 ops, tensor-active cycles, issue counters and duration only when the host grants performance-counter access. It explicitly refuses `ERR_NVGPUCTRPERM`; an empty result can never be mistaken for zero work.
 
-Both launchers inherit the existing fail-closed `run_2pf_guarded.sh` policy and never stop or signal production to manufacture a benchmark window.
+Both launchers inherit the fail-closed `run_2pf_guarded.sh` policy. The guard never signals production; when a bounded handoff is explicitly authorized, `run_2pf_handoff.sh` owns STOP/CONT and guarantees trap-based resume while the guard independently enforces exact-PID isolation.
