@@ -1,0 +1,121 @@
+[
+  {
+    "bit": 0,
+    "rc": 0,
+    "op": null,
+    "line": "",
+    "err": ""
+  },
+  {
+    "bit": 1,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 2,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 3,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 4,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 5,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 6,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 7,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 8,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 9,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 10,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 11,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Unrecognized operation for functional unit 'uC' at address 0x00000080"
+  },
+  {
+    "bit": 78,
+    "rc": 0,
+    "op": null,
+    "line": "",
+    "err": ""
+  },
+  {
+    "bit": 79,
+    "rc": 0,
+    "op": null,
+    "line": "",
+    "err": ""
+  },
+  {
+    "bit": 105,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Opclass 'omma_sp_scale_', undefined value 0x10 for table 'TABLES_opex_3' at address 0x00000080"
+  },
+  {
+    "bit": 122,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Opclass 'omma_sp_scale_', undefined value 0x31 for table 'TABLES_opex_3' at address 0x00000080"
+  },
+  {
+    "bit": 124,
+    "rc": 1,
+    "op": null,
+    "line": "",
+    "err": "nvdisasm error   : Opclass 'omma_sp_scale_', undefined value 0x91 for table 'TABLES_opex_3' at address 0x00000080"
+  }
+]
