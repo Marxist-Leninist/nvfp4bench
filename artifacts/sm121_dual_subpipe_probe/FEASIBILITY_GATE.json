@@ -1,0 +1,18 @@
+{
+  "interpretation": "At the observed clock, a 0.5 sparse-IMMA/SM/cycle engine cannot cross 2 P combined even under perfect overlap. The dual-subpipe silicon probe must demonstrate >~0.551 IMMA/SM/cycle and substantial overlap to reach 2 P under this mixed dense-equivalent work accounting.",
+  "observed_clock_ghz": 2.418,
+  "observed_omma_dense_equiv_tflops": 952.05,
+  "perfect_overlap_combined_P_if_imma_rates": {
+    "0.5": 1.902846288,
+    "0.55": 1.9979259168,
+    "0.6": 2.0930055456,
+    "1.0": 2.853642576
+  },
+  "required_extra_tops_to_2p": 1047.95,
+  "required_sparse_imma_inst_per_sm_cycle_at_2p5ghz": 0.5330149332682291,
+  "required_sparse_imma_inst_per_sm_cycle_at_observed_clock": 0.5510907085072675,
+  "runtime_executed": false,
+  "schema": "agillm.sm121.dual-subpipe-feasibility-gate.v1",
+  "sm_count": 48,
+  "sparse_s8_imma_dense_equiv_ops_per_instruction": 16384
+}

@@ -1,0 +1,27 @@
+{
+  "artifacts": {
+    "bmma_k256.cu": {
+      "bytes": 1631,
+      "sha256": "a68fd8d9048c325b135476eadce8f61a809210b037194c70d74bfd1b689624ce"
+    },
+    "toolchain_mma_helpers.txt": {
+      "bytes": 3919,
+      "sha256": "b72db4a15e42a0cb58c97672f6c2af0f651d2971eb55487a6d86a3f2cb9ad595"
+    }
+  },
+  "conclusion": "SM121 accepts B1 k256 PTX as a compatibility form but lowers one logical matrix operation into a wrapper that invokes an 8-IMMA helper twice, plus substantial bit extraction/packing. It is not a native high-work machine instruction.",
+  "logical_ptx_forms": [
+    "mma.sync.aligned.m16n8k256.row.col.s32.b1.b1.s32.xor.popc",
+    "mma.sync.aligned.m16n8k256.row.col.s32.b1.b1.s32.and.popc"
+  ],
+  "lowering": {
+    "imma_per_logical_b1_k256_mma": 16,
+    "inner_helper_imma_count": 8,
+    "inner_machine_form": "IMMA.16832.U8.U8",
+    "logical_mma_calls_wrapper": 1,
+    "wrapper_calls_inner_helper": 2
+  },
+  "native_bmma_k256_sass_observed": false,
+  "runtime_executed": false,
+  "schema": "agillm.sm121.bitmma-k256-static.v1"
+}

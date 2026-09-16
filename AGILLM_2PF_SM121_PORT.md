@@ -187,3 +187,13 @@ Static SM121 results now close several tempting shortcuts:
 - An exhaustive 64-value sweep of the local OMMA machine mode field (full instruction bits 78..83) decodes only the expected dense-k64 / sparse-k128, E8 / UE4M3, and 4X / non-4X combinations. It exposes **no wider-work OMMA mode**.
 
 Receipts and compact reproducer artifacts are tracked under `artifacts/sm121_higher_work_search/`. The raw unrelated-opcode-family search remains open; none of these static results is itself a runtime throughput claim.
+
+
+## Bit-MMA compatibility and dual-subpipe feasibility
+
+Two additional shortcuts are now bounded statically:
+
+- Logical B1 `m16n8k256` MMA is accepted by CUDA 13 for SM121 but is **not native**. One logical operation lowers through a wrapper that calls an inner helper twice; each inner helper contains eight `IMMA.16832.U8.U8` instructions. That is **16 ordinary IMMAs per logical bit-MMA**, plus bit extraction and packing. It is not a hidden 65,536-op machine instruction.
+- With the measured sparse-FP4 OMMA side at about **952.05 TFLOP/s**, a concurrent sparse-S8 IMMA side must contribute about **1.048 Petaops/s** to cross 2 P combined. At 48 SM and 2.418 GHz this requires roughly **0.551 IMMA instructions/SM/cycle**. A 0.5-instruction/cycle IMMA ceiling would reach only about **1.903 P** even with perfect OMMA/IMMA overlap.
+
+The guarded cross-warp `dual_subpipe_warp` probe therefore remains worthwhile, but it has a hard quantitative gate: it must show both real overlap and an IMMA issue rate above this threshold before 2 P combined is physically plausible.
