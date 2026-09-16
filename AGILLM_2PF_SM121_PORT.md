@@ -48,3 +48,18 @@ Highest-value path. Existing ~1 PF loop is one OMMA stream. Search for scheduler
 ### H3: SM100 pipeline semantics over warp OMMA
 Most practical for useful GEMM/training. Port TMA + LDSM/STSM + warp specialization concepts onto `mma.sync`/`mma.sp`. This may not yield 2 PF micropeak, but is the strongest route to turning ~1 PF micropeak into substantially higher end-to-end GEMM/training efficiency.
 
+
+## Static legality result: wider packed-NVFP4 matrix shapes are closed
+
+On CUDA 13 / `ptxas -arch=sm_121a`, a systematic static sweep covered every matrix-shape token present in the installed ptxas binary plus nearby plausible variants (26 candidates total) against both packed NVFP4 dense and packed+sparse PTX families.
+
+Accepted forms were exactly:
+
+- packed dense: `m16n8k64`
+- packed + structured sparse: `m16n8k128`
+
+All other candidates were rejected as **illegal matrix shapes**, including `m16n8k256`; there were no operand-mismatch-only candidates suggesting a larger legal shape with merely different register-vector widths. This closes the hidden-k256/wider-shape hypothesis for the programmable `sm_121a` warp-MMA interface.
+
+Artifacts: `src/legal_shape_sweep.py` and `/workspace/gb10_2pflop_openfork_20260916/static_recon/legal_shape_sweep/results.json`.
+
+The remaining honest 2-PF hypotheses are therefore issue-rate/scheduler-domain improvements using the legal `m16n8k128` sparse OMMA, or a different legal instruction encoding with the same logical shape. FLOP accounting stays fixed.
