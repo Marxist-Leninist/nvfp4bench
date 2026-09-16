@@ -1,0 +1,11 @@
+{
+  "schema": "agillm.sm121.pure-issue-witness-index-correction.v1",
+  "date_utc": "2026-09-16",
+  "status": "silicon_verified",
+  "original_static_prediction_sink_multiplicity": [2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2],
+  "correct_sink_multiplicity": [2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2],
+  "reason": "The patch receipt labeled donor omission in source DO(j) order, but witness_runner indexes the stored sink d[j] order. nvcc register allocation stores source DO(15)/R64 at sink[0], then DO(0)/R60 at sink[1], through DO(14)/R4 at sink[15]. The omitted donor is source DO(7)/R32, which therefore maps to sink index 8, not 7.",
+  "base_self_check": "PASS 64/64",
+  "corrected_fill100_checks": "PASS for stall8/y0, stall8/y1, mixed5 stall7/rest8/y0, stall7/y0, stall7/y1",
+  "candidate_semantics_changed": false
+}

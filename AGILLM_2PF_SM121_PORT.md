@@ -154,3 +154,23 @@ Accordingly the performance proof is deliberately two-layered:
 2. **Optional corroboration:** `profile_pure_issue_guarded.sh` collects `sm__inst_executed_pipe_tensor_subpipe_hmma.sum`, sparse-FP4 ops, tensor-active cycles, issue counters and duration only when the host grants performance-counter access. It explicitly refuses `ERR_NVGPUCTRPERM`; an empty result can never be mistaken for zero work.
 
 Both launchers inherit the fail-closed `run_2pf_guarded.sh` policy. The guard never signals production; when a bounded handoff is explicitly authorized, `run_2pf_handoff.sh` owns STOP/CONT and guarantees trap-based resume while the guard independently enforces exact-PID isolation.
+
+## 2026-09-16 bounded-handoff silicon result
+
+The advisory-only SG coordination update allowed a short, explicit, trap-protected benchmark handoff without treating historical GPU notes as ownership locks. The production trainer was paused only after the live CUDA census contained exactly its PID and no checkpoint temporary/open checkpoint file existed; it was resumed automatically on every exit path.
+
+The first arithmetic attempt caught a metadata indexing bug before timing: the static donor receipt used source `DO(j)` order, whereas `witness_runner` checks stored sink order. Disassembly shows sink index 0 is source `DO(15)` (`R64..R67`), sink index 1 is source `DO(0)` (`R60..R63`), and so on. The omitted donor is source `DO(7)` (`R32..R35`), therefore the correct sink multiplicity vector is `[2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2]`. With that correction, all six 64-component checks passed.
+
+Matched 31-OMMA timing (`48 SM`, clock attribute `2418 MHz`, `384` blocks, `128` threads, `700` loop iterations, `17` samples) produced:
+
+| candidate | median TFLOP/s | best sample TFLOP/s | median OMMA/SM/cycle @ 2.5 GHz |
+|---|---:|---:|---:|
+| stall8 / yield0 | 943.501 | 943.788 | 0.239945 |
+| stall8 / yield1 | 943.631 | 951.842 | 0.239978 |
+| mixed 5x stall7 + 25x stall8 / yield0 | 950.358 | 951.258 | 0.241688 |
+| stall7 / yield0 | 950.252 | 950.675 | 0.241662 |
+| stall7 / yield1 | **951.895** | **952.187** | **0.242079** |
+
+This is a decisive negative result for the reduced-stall shortcut. Moving from stall8/y0 to the best stall7/y1 candidate improves median throughput by only about 0.89%, and all variants remain near one quarter OMMA per SM cycle rather than the `0.508626` OMMA/SM/cycle required for 2 PFLOP/s under the fixed accounting. That materially strengthens the shared-OMMA-backend-limit hypothesis. Future 2PF work should prioritize mechanisms that expose genuinely additional tensor issue capacity, not further small same-warp stall reductions.
+
+Raw runtime receipt: `artifacts/sm121_stall_runtime_20260916/summary.json`. The corrected index-space explanation is preserved in `artifacts/sm121_stall_runtime_20260916/SILICON_INDEX_CORRECTION.json`.
